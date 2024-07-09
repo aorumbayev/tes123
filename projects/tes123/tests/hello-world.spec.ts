@@ -34,18 +34,21 @@ describe('hello world contract', () => {
     const { algod, indexer, testAccount } = localnet.context
     const { client } = await deploy(testAccount, algod, indexer)
 
-    const result = await client.hello({ name: 'World' })
-
-    expect(result.return).toBe('Hello, World')
+    const result = await client.addMarketplaceToList({ appId: 1 })
+    const result2 = await client.addMarketplaceToList({ appId: 2 })
+    const result3 = await client.addMarketplaceToList({ appId: 3 })
+    const state = await (await client.getGlobalState()).marketplaceList
+    console.log(state)
+    // expect(result.return).toBe('Hello, World')
   })
 
-  test('simulate says hello with correct budget consumed', async () => {
-    const { algod, indexer, testAccount } = localnet.context
-    const { client } = await deploy(testAccount, algod, indexer)
-    const result = await client.compose().hello({ name: 'World' }).hello({ name: 'Jane' }).simulate()
+  // test('simulate says hello with correct budget consumed', async () => {
+  //   const { algod, indexer, testAccount } = localnet.context
+  //   const { client } = await deploy(testAccount, algod, indexer)
+  //   const result = await client.compose().hello({ name: 'World' }).hello({ name: 'Jane' }).simulate()
 
-    expect(result.methodResults[0].returnValue).toBe('Hello, World')
-    expect(result.methodResults[1].returnValue).toBe('Hello, Jane')
-    expect(result.simulateResponse.txnGroups[0].appBudgetConsumed).toBeLessThan(100)
-  })
+  //   expect(result.methodResults[0].returnValue).toBe('Hello, World')
+  //   expect(result.methodResults[1].returnValue).toBe('Hello, Jane')
+  //   expect(result.simulateResponse.txnGroups[0].appBudgetConsumed).toBeLessThan(100)
+  // })
 })
